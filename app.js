@@ -26,13 +26,23 @@ if (process.env.NODE_ENV === "development") {
   );
 }
 
+
 if (process.env.NODE_ENV === "production") {
   logger.info("Production mode");
   app.use(
     cors({
-      origin: [config.FRONTEND_URL],
+      origin: [
+        config.FRONTEND_URL,
+        'http://localhost:3000',
+        'http://localhost:3001',
+        'https://your-frontend-domain.com', // Add your frontend domain when deployed
+        /\.eleqt\.in$/, // Allow any subdomain of eleqt.in
+        /^http:\/\/10\.0\.2\.2:/, // Allow Android emulator
+        /^http:\/\/localhost:/, // Allow localhost for development
+      ],
       methods: ["GET", "POST", "PUT", "DELETE"],
       credentials: true,
+      optionsSuccessStatus: 200, // For legacy browser support
     })
   );
 }
