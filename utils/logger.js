@@ -25,11 +25,19 @@ const error = (...params) => {
   }
 };
 
-// Initialize logger with rotation
+// Initialize logger (cloud-friendly version)
 const initializeLogger = async () => {
   try {
-    // Create log directory if not exists
-    await fs.mkdir(LOG_DIR, { recursive: true });
+    // In cloud environments, we'll use console logging only
+    if (process.env.NODE_ENV === "production") {
+      info("Logger initialized for production (console only)");
+      return;
+    }
+    
+    // Only create log directory in development
+    if (process.env.NODE_ENV === "development") {
+      await fs.mkdir(LOG_DIR, { recursive: true });
+    }
     info("Logger initialized successfully");
   } catch (err) {
     error("Logger initialization failed:", err.message);
@@ -69,11 +77,21 @@ const rotateLogs = async (filePath) => {
   }
 };
 
-// Audit logging with rotation and compression
+// Audit logging (cloud-friendly version)
 const logAudit = async (entries) => {
   if (!Array.isArray(entries) || entries.length === 0) return;
 
   try {
+    // In production/cloud, log to console instead of files
+    if (process.env.NODE_ENV === "production") {
+      const timestamp = new Date().toISOString();
+      entries.forEach(entry => {
+        console.log(`[AUDIT] ${timestamp} -`, JSON.stringify(entry));
+      });
+      return;
+    }
+
+    // File logging only in development
     const filePath = path.join(LOG_DIR, "audit.log");
 
     // Check if rotation is needed
@@ -95,24 +113,12 @@ const logAudit = async (entries) => {
     await fs.appendFile(filePath, logData);
   } catch (err) {
     error("Audit log write failed:", err.message);
-
-    // Create emergency log file
-    const emergencyPath = path.join(
-      LOG_DIR,
-      `audit_emergency_${Date.now()}.log`
-    );
-    await fs.writeFile(
-      emergencyPath,
-      JSON.stringify({
-        error: "Primary audit log failure",
-        timestamp: new Date().toISOString(),
-        originalError: err.message,
-        entries,
-      })
-    );
-
-    // Fallback to console
-    console.error(`[AUDIT-EMERGENCY] Logs saved to ${emergencyPath}`);
+    
+    // Fallback to console in all cases
+    console.error(`[AUDIT-FALLBACK]`, JSON.stringify({ 
+      error: "Audit log failure", 
+      entries 
+    }));
   }
 };
 
