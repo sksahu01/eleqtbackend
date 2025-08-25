@@ -33,7 +33,7 @@ const initializeLogger = async () => {
       info("Logger initialized for production (console only)");
       return;
     }
-    
+
     // Only create log directory in development
     if (process.env.NODE_ENV === "development") {
       await fs.mkdir(LOG_DIR, { recursive: true });
@@ -113,11 +113,11 @@ const logAudit = async (entries) => {
     await fs.appendFile(filePath, logData);
   } catch (err) {
     error("Audit log write failed:", err.message);
-    
+
     // Fallback to console in all cases
-    console.error(`[AUDIT-FALLBACK]`, JSON.stringify({ 
-      error: "Audit log failure", 
-      entries 
+    console.error(`[AUDIT-FALLBACK]`, JSON.stringify({
+      error: "Audit log failure",
+      entries
     }));
   }
 };
