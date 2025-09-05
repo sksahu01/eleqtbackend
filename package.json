@@ -1,0 +1,46 @@
+{
+  "name": "eleqt-backend",
+  "version": "0.0.1",
+  "description": "backend for premium ev rental business managed by psynux sofware",
+  "main": "server.js",
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "build": "npm install",
+    "start": "cross-env NODE_ENV=production node server.js",
+    "dev": "cross-env NODE_ENV=development nodemon server.js",
+    "lint": "eslint .",
+    "test": ""
+  },
+  "keywords": [
+    "ev",
+    "rental"
+  ],
+  "author": "Soumya Sourav, Rajesh",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "date-fns": "^4.1.0",
+    "dotenv": "^16.6.1",
+    "express": "^4.21.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.16.1",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.10.1",
+    "razorpay": "^2.9.6",
+    "twilio": "^5.7.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.30.1",
+    "@eslint/json": "^0.13.0",
+    "eslint": "^9.30.1",
+    "eslint-config-prettier": "^10.1.5",
+    "globals": "^16.3.0",
+    "nodemon": "^3.1.10"
+  }
+}
