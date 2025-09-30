@@ -429,52 +429,44 @@ This comprehensive document provides all necessary information for frontend deve
 - **Description**: Calculates fare for outstation trip without booking
 - **Request Body**:
   ```json
-  {
-    "pickUp": {
-      "address": "Mumbai Central, Mumbai",
-      "location": {
-        "type": "Point",
-        "coordinates": [72.8289, 18.9690]
-      }
+  "pickup": {
+    "address": "ITER College, Bhubaneswar, Odisha",
+    "location": {
+      "type": "Point",
+      "coordinates": [85.8189, 20.2430]
+    }
+  },
+  "dropOff": {
+    "address": "Berhampur, Odisha",
+    "location": {
+      "type": "Point",
+      "coordinates": [84.7913, 19.3149]
+    }
+  },
+  "stops": [],
+  "passengerCount": 2,        
+  "luggageCount": 4,          
+  "carType": "3-seater",
+  "startTime": "2025-09-13T08:00:00.000Z",
+  "isRoundTrip": false,
+  "returnTime": null,
+  "addOns": {
+    "airportToll": false,
+    "placard": {
+      "required": false,
+      "text": ""
     },
-    "dropOff": {
-      "address": "Pune Railway Station, Pune",
-      "location": {
-        "type": "Point",
-        "coordinates": [73.8567, 18.5204]
-      }
+    "pets": {
+      "dogs": false,
+      "cats": false
     },
-    "stops": [
-      {
-        "address": "Lonavala, Maharashtra",
-        "location": {
-          "type": "Point",
-          "coordinates": [73.4067, 18.7547]
-        }
-      }
-    ],
-    "passengerCount": 4,
-    "luggageCount": 3,
-    "startTime": "2024-01-25T09:00:00.000Z",
-    "totalDistance": 150,
-    "isRoundTrip": true,
-    "returnTime": "2024-01-26T18:00:00.000Z",
-    "addOns": {
-      "airportToll": false,
-      "placard": {
-        "required": false,
-        "text": ""
-      },
-      "pets": false,
-      "bookForOther": {
-        "isBooking": false,
-        "otherGuestInfo": ""
-      }
+    "bookForOther": {
+      "isBooking": false,
+      "otherGuestInfo": ""
     }
   }
   ```
-- **Field Validation**:
-  - `totalDistance`: 1-350 km (maximum outstation range)
+-**Field Validation**:
   - `isRoundTrip`: boolean
   - `returnTime`: Required if roundTrip, must be after startTime
   - Dropoff must be within 350km radius from service center
@@ -507,39 +499,42 @@ This comprehensive document provides all necessary information for frontend deve
 - **Request Body**:
   ```json
   {
-    "pickUp": {
-      "address": "Mumbai Central, Mumbai",
-      "location": {
-        "type": "Point",
-        "coordinates": [72.8289, 18.9690]
-      }
-    },
-    "dropOff": {
-      "address": "Goa Airport, Goa",
-      "location": {
-        "type": "Point",
-        "coordinates": [74.1240, 15.3647]
-      }
-    },
-    "stops": [],
-    "passengerCount": 2,
-    "luggageCount": 4,
-    "startTime": "2024-01-28T06:00:00.000Z",
-    "totalDistance": 280,
-    "isRoundTrip": false,
-    "guestCount": 0,
-    "addOns": {
-      "airportToll": true,
-      "placard": {
-        "required": false,
-        "text": ""
-      },
-      "pets": false,
-      "bookForOther": {
-        "isBooking": false,
-        "otherGuestInfo": ""
-      }
+  "pickup": {
+    "address": "ITER College, Bhubaneswar, Odisha",
+    "location": {
+      "type": "Point",
+      "coordinates": [85.8189, 20.2430]
     }
+  },
+  "dropOff": {
+    "address": "Berhampur, Odisha",
+    "location": {
+      "type": "Point",
+      "coordinates": [84.7913, 19.3149]
+    }
+  },
+  "stops": [],
+  "passengerCount": 2,
+  "luggageCount": 4,
+  "carType": "3-seater",
+  "startTime": "2025-09-13T08:00:00.000Z",
+  "isRoundTrip": false,
+  "returnTime": null,
+  "addOns": {
+    "airportToll": false,
+    "placard": {
+      "required": false,
+      "text": ""
+    },
+    "pets": {
+      "dogs": false,
+      "cats": false
+    },
+    "bookForOther": {
+      "isBooking": false,
+      "otherGuestInfo": ""
+    },
+    "childSeat": false
   }
   ```
 - **Success Response (201)**:
@@ -972,7 +967,72 @@ This comprehensive document provides all necessary information for frontend deve
   "message": "Passenger count must be between 1 and 5"
 }
 ```
+## 14.🚖 Luxury Car Booking API
+## ✅ API Endpoint
 
+### POST `/api/v1/bookings/order/luxury`
+
+---
+
+## ✅ Request Headers
+
+| Key           | Value                     |
+|------------- |----------------------------|
+| Authorization | Bearer `<JWT_TOKEN>`       |
+| Content-Type  | application/json           |
+
+---
+
+## ✅ Request Body
+
+```json
+{
+  "carNumber": "OD02AB1234",
+  "passengerCount": 3,
+  "luggageCount": 2,
+  "startTime": "2025-09-16T10:00:00.000Z",
+  "addOns": {
+    "airportToll": true,
+    "placard": {
+      "required": true,
+      "text": "Welcome Mr. Sharma"
+    },
+    "pets": {
+      "dogs": false,
+      "cats": true
+    },
+    "bookForOther": {
+      "isBooking": false,
+      "otherGuestInfo": ""
+    },
+    "childSeat": true
+  }
+}
+```
+
+## ✅ Successful Response (201 Created)
+
+```json
+{
+  "success": true,
+  "message": "Luxury car booking created successfully",
+  "data": {
+    "bookingId": "652d7c5b6a4f3a1234abcd56",
+    "fare": 250000,
+    "fareInRupees": "2500.00",
+    "carNumber": "OD02AB1234",
+    "carModel": "Mercedes S-Class",
+    "driverName": "Suresh Kumar",
+    "driverNumber": "+919876543210",
+    "status": "pending"
+  },
+  "options": "<encrypted_payment_options_string>",
+  "meta": {
+    "currency": "INR",
+    "amountUnit": "paise (₹1 = 100 paise)"
+  }
+}
+```
 ---
 
 ## **Best Practices for Frontend Integration**

@@ -48,6 +48,26 @@ const bookingSchema = new mongoose.Schema(
       ref: "Driver",
       default: null,
     },
+    driverName: {
+      type: String,
+      trim: true,
+      default: null, // store the driver's name
+    },
+    driverNumber: {
+      type: String,
+      trim: true,
+      default: null, // store the driver's phone number
+    },
+    carNo: {
+      type: String,
+      trim: true,
+      default: null,
+    },
+    carModel: {
+      type: String,
+      trim: true,
+      default: null,
+    },
     passengerCount: {
       type: Number,
       required: true,
@@ -210,6 +230,32 @@ const hourlySchema = new mongoose.Schema(
   { _id: false }
 );
 const HourlyBooking = Booking.discriminator("hourly", hourlySchema);
+const luxurySchema = new mongoose.Schema(
+  {
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    carNumber: { type: String, required: true },
+    carModel: { type: String, required: true },
+    driverName: { type: String, required: true },
+    driverNumber: { type: String, required: true },
+    ownerName: { type: String, required: true },
+    ownerNumber: { type: String, required: true },
+    passengerCount: { type: Number, required: true },
+    luggageCount: { type: Number, required: true },
+    addOns: { type: Object },
+    startTime: { type: Date, required: true },
+    payment: { type: Object, required: true },
+    status: { type: String, default: "pending" },
+  },
+  {
+    timestamps: true,
+    collection: "luxurybookings",
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
+
+export const LuxuryBooking = mongoose.model("LuxuryBooking", luxurySchema);
+
 
 // Outstation Booking Schema + Distance Validation
 const outstationSchema = new mongoose.Schema(
@@ -306,4 +352,4 @@ function getCarType(passengerCount, luggageCount) {
   return null;
 }
 
-export { Booking, HourlyBooking, OutstationBooking };
+export { Booking, HourlyBooking, OutstationBooking  };

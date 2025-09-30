@@ -10,6 +10,7 @@ import {
   getUserBookings,
   getBookingById,
   cancelBookingById,
+  bookLuxuryCar,
 } from "../controllers/bookingController.js";
 
 const bookingRouter = express.Router();
@@ -29,6 +30,7 @@ bookingRouter.post(
   isAuthenticated,
   bookRideForHourlyRental
 );
+bookingRouter.post("/order/luxury", isAuthenticated, bookLuxuryCar);
 bookingRouter.post("/order/outstation", isAuthenticated, bookRideForOutstation);
 bookingRouter.post(
   "/verify-payment/:bookingId",
